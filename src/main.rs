@@ -1,4 +1,17 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, render::camera::ScalingMode};
+
+#[derive(Component)]
+pub struct Player{
+    pub speed: f32,
+}
+
+#[derive(Component)]
+pub struct Pig{
+    pub lifetime: Timer,
+}
+
+#[derive(Component)]
+pub struct Money(pub f32);
 
 fn main() {
     App::new()
@@ -21,18 +34,24 @@ fn main() {
 }
 
 fn setup(mut commands: Commands, asset_server: Res<AssetServer>){
-    commands.spawn(Camera2dBundle::default());
+    let  mut camera =  Camera2dBundle::default();
+
+    camera.projection.scaling_mode = ScalingMode::AutoMin{
+        min_width: 256.0,
+        min_height: 144.0,
+    };
+
+    commands.spawn(camera);
 
     let texture = asset_server.load("character.png");
 
-    commands.spawn(SpriteBundle {
-        sprite: Sprite{
-            custom_size: Some(Vec2::new(100.0,100.0)),
+    commands.spawn((
+        SpriteBundle {
+            texture,
             ..default()
         },
-        texture,
-        ..default()
-    });
+        Player{speed:100.0},
+    ));
 }
 
 fn character_movement(
@@ -55,3 +74,4 @@ fn character_movement(
         }
     }
 }
+
