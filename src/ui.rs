@@ -8,9 +8,9 @@ pub struct GameUI;
 pub struct MoneyText;
 
 impl Plugin for GameUI{
-    fn build(&self, app:mut App){
+    fn build(&self, app:&mut App){
         app.add_systems(Startup, spawn_game_ui)
-        .add_systems(Update,update_money_ui)
+        .add_systems(Update,update_money_ui);
     }
 }
 
@@ -24,10 +24,10 @@ fn spawn_game_ui(mut commands: Commands){
                 align_items: AlignItems::Center,
                 padding: UiRect::all(Val::Px(10.0)),
                 ..default()
-            }
+            },
             background_color: Color::BLUE.into(),
             ..default()
-        }
+        },
         Name::new("UI Root"),
     ))
     .with_children(|commands| {
